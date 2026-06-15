@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'MiFuente';
+  src: url('/fonts/mifuente.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ElementosFuente';
+  src: url('/fonts/elementosfuente.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+html {
+  font-size: 18px;
+}
+
+:root {
+  --color-primary: #fbddc3;
+  --color-secondary: #edbce0;
+  --color-text: #3d2314;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #3d2314;
+  background: #ffffff;
+}
+
+.font-display {
+  font-family: 'MiFuente', cursive;
+}
+
+.font-elements {
+  font-family: 'ElementosFuente', cursive;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s ease-out;
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-card-enter {
+  animation: card-enter 0.2s ease-out both;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #fbddc3 25%, #fef9f5 50%, #fbddc3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}

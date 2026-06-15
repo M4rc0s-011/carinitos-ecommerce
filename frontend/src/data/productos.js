@@ -1,0 +1,58 @@
+export const PRODUCTOS = [
+  {
+    id: 1,
+    nombre: 'Colgante Nombre en Oro',
+    precio: 850,
+    coleccion: 'Café',
+    descripcion: 'Personalizado con tu nombre en letra cursiva. Ideal para regalar o para llevar tu esencia siempre contigo.',
+    detalles: {
+      tamaño: '45 cm de cadena',
+      material: 'Baño en oro 18k',
+      tiempoProduccion: '3-5 días hábiles',
+      envios: 'Todo el país',
+    },
+    imagenes: [null, null, null],
+  },
+  {
+    id: 2,
+    nombre: 'Dije Corazón Inicial',
+    precio: 650,
+    coleccion: 'Llaveros',
+    descripcion: 'Corazón con la inicial que elijas, trabajado a mano con acabado fino y delicado.',
+    detalles: {
+      tamaño: '40 cm de cadena',
+      material: 'Plata 925',
+      tiempoProduccion: '2-4 días hábiles',
+      envios: 'Todo el país',
+    },
+    imagenes: [null, null, null],
+  },
+  {
+    id: 3,
+    nombre: 'Collar Perlas & Charm',
+    precio: 1200,
+    coleccion: 'Navidad',
+    descripcion: 'Perlas naturales combinadas con un dije personalizado. Elegancia artesanal en cada detalle.',
+    detalles: {
+      tamaño: '42 cm de cadena',
+      material: 'Perlas naturales + baño en oro',
+      tiempoProduccion: '5-7 días hábiles',
+      envios: 'Todo el país',
+    },
+    imagenes: [null, null, null],
+  },
+  {
+    id: 4,
+    nombre: 'Gargantilla Flor',
+    precio: 750,
+    coleccion: 'Café',
+    descripcion: 'Delicada flor artesanal en plata con detalles grabados a mano. Minimalista y elegante.',
+    detalles: {
+      tamaño: '38 cm de cadena',
+      material: 'Plata 925',
+      tiempoProduccion: '3-5 días hábiles',
+      envios: 'Todo el país',
+    },
+    imagenes: [null, null, null],
+  },
+]

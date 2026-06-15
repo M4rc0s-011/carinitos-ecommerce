@@ -1,0 +1,11 @@
+﻿node_modules/
+.env
+.env.local
+dist/
+.agents/
+skills-lock.json
+
+# Herramientas de IA
+.claude/
+.kiro/
+CLAUDE.md
