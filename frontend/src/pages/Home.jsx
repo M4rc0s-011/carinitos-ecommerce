@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Heart, Sparkles, Package } from 'lucide-react'
 import { getProductos } from '../api/productos'
@@ -33,12 +33,33 @@ function mezclar(arr) {
 
 export default function Home() {
   const [productos, setProductos] = useState([])
+  const carruselRef = useRef(null)
+  const pausadoRef = useRef(false)
 
   useEffect(() => {
     getProductos({ ordenar: 'recientes' })
       .then((data) => setProductos(mezclar(data)))
       .catch(() => { })
   }, [])
+
+  // Auto-scroll lento del carrusel con loop sin cortes
+  useEffect(() => {
+    if (productos.length === 0) return
+    const el = carruselRef.current
+    if (!el) return
+
+    const id = setInterval(() => {
+      if (pausadoRef.current) return
+      // la lista está duplicada: al pasar la mitad, reiniciamos sin salto visible
+      const mitad = el.scrollWidth / 2
+      if (el.scrollLeft >= mitad) {
+        el.scrollLeft -= mitad
+      }
+      el.scrollLeft += 1
+    }, 30)
+
+    return () => clearInterval(id)
+  }, [productos])
 
   return (
     <main>
@@ -84,8 +105,15 @@ export default function Home() {
           Algunos de nuestros productos
         </h2>
         {productos.length > 0 && (
-          <div className="overflow-hidden">
-            <div className="flex w-max gap-6 animate-marquee">
+          <div
+            ref={carruselRef}
+            onMouseEnter={() => { pausadoRef.current = true }}
+            onMouseLeave={() => { pausadoRef.current = false }}
+            onTouchStart={() => { pausadoRef.current = true }}
+            onTouchEnd={() => { pausadoRef.current = false }}
+            className="overflow-x-auto pb-4 px-4"
+          >
+            <div className="flex items-stretch w-max gap-6">
               {[...productos, ...productos].map((p, i) => (
                 <div key={`${p.id}-${i}`} className="w-56 sm:w-64 flex-shrink-0">
                   <ProductCard producto={p} />
