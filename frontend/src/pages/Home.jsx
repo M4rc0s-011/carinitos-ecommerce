@@ -22,12 +22,21 @@ const VALORES = [
   },
 ]
 
+function mezclar(arr) {
+  const copia = [...arr]
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copia[i], copia[j]] = [copia[j], copia[i]]
+  }
+  return copia
+}
+
 export default function Home() {
   const [productos, setProductos] = useState([])
 
   useEffect(() => {
     getProductos({ ordenar: 'recientes' })
-      .then((data) => setProductos(data.slice(0, 4)))
+      .then((data) => setProductos(mezclar(data)))
       .catch(() => { })
   }, [])
 
@@ -70,15 +79,21 @@ export default function Home() {
       </section>
 
       {/* Productos destacados */}
-      <section className="max-w-6xl mx-auto px-4 py-5">
+      <section className="py-5">
         <h2 className="font-display text-3xl md:text-6xl text-[#3d2314] text-center mb-10">
-          Los más pedidos
+          Algunos de nuestros productos
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {productos.map((p) => (
-            <ProductCard key={p.id} producto={p} />
-          ))}
-        </div>
+        {productos.length > 0 && (
+          <div className="overflow-hidden">
+            <div className="flex w-max gap-6 animate-marquee">
+              {[...productos, ...productos].map((p, i) => (
+                <div key={`${p.id}-${i}`} className="w-56 sm:w-64 flex-shrink-0">
+                  <ProductCard producto={p} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="text-center mt-10">
           <Link
             to="/catalogo"
