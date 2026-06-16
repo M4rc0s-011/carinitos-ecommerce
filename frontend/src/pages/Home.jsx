@@ -38,7 +38,7 @@ export default function Home() {
 
   useEffect(() => {
     getProductos({ ordenar: 'recientes' })
-      .then((data) => setProductos(mezclar(data).slice(0, 6)))
+      .then((data) => setProductos(mezclar(data).slice(0, 4)))
       .catch(() => { })
   }, [])
 
@@ -115,7 +115,7 @@ export default function Home() {
           >
             <div className="flex items-stretch w-max gap-6">
               {[...productos, ...productos].map((p, i) => (
-                <div key={`${p.id}-${i}`} className="w-56 sm:w-64 flex-shrink-0">
+                <div key={`${p.id}-${i}`} className="w-64 sm:w-80 flex-shrink-0">
                   <ProductCard producto={p} />
                 </div>
               ))}

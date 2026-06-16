@@ -33,27 +33,38 @@ body {
   background: #ffffff;
 }
 
+/* Scrollbar principal — claro, translúcido y oculto hasta interactuar */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #3d2314 #fbddc3;
+  scrollbar-color: transparent transparent;
+}
+
+html:hover {
+  scrollbar-color: rgba(61, 35, 20, 0.2) transparent;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #fbddc3;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3d2314;
+  background: transparent;
   border-radius: 9999px;
-  border: 2px solid #fbddc3;
+  transition: background 0.3s ease;
+}
+
+html:hover::-webkit-scrollbar-thumb,
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(61, 35, 20, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5a3520;
+  background: rgba(61, 35, 20, 0.35);
 }
 
 .font-display {
@@ -98,25 +109,34 @@ html {
 
 .carrusel-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #3d2314 #fbddc3;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.carrusel-scroll:hover {
+  scrollbar-color: rgba(61, 35, 20, 0.2) transparent;
 }
 
 .carrusel-scroll::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
 
 .carrusel-scroll::-webkit-scrollbar-track {
-  background: #fbddc3;
-  border-radius: 9999px;
+  background: transparent;
 }
 
 .carrusel-scroll::-webkit-scrollbar-thumb {
-  background: #3d2314;
+  background: transparent;
   border-radius: 9999px;
+  transition: background 0.3s ease;
 }
 
-.carrusel-scroll::-webkit-scrollbar-thumb:hover {
-  background: #5a3520;
+.carrusel-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(61, 35, 20, 0.2);
+}
+
+.carrusel-scroll:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(61, 35, 20, 0.35);
 }
 
 @keyframes shimmer {
