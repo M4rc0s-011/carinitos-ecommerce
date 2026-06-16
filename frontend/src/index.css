@@ -33,13 +33,13 @@ body {
   background: #ffffff;
 }
 
-/* Scrollbar principal — claro, translúcido y oculto hasta interactuar */
+/* Scrollbar principal — claro, translúcido y oculto hasta hacer scroll */
 html {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
 
-html:hover {
+html.scrolling {
   scrollbar-color: rgba(61, 35, 20, 0.2) transparent;
 }
 
@@ -58,12 +58,11 @@ html:hover {
   transition: background 0.3s ease;
 }
 
-html:hover::-webkit-scrollbar-thumb,
-*:hover::-webkit-scrollbar-thumb {
+html.scrolling::-webkit-scrollbar-thumb {
   background: rgba(61, 35, 20, 0.2);
 }
 
-::-webkit-scrollbar-thumb:hover {
+html.scrolling::-webkit-scrollbar-thumb:hover {
   background: rgba(61, 35, 20, 0.35);
 }
 
