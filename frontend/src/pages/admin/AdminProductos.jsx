@@ -8,6 +8,7 @@ import {
   activarProducto,
   getCategorias,
 } from '../../api/admin'
+import { optimizarImagen } from '../../utils/cloudinary'
 
 const EMPTY_FORM = {
   nombre:       '',
@@ -347,8 +348,10 @@ export default function AdminProductos() {
                     <td className="px-4 py-3">
                       {p.imagen ? (
                         <img
-                          src={p.imagen}
+                          src={optimizarImagen(p.imagen, { w: 80, h: 80 })}
                           alt={p.nombre}
+                          loading="lazy"
+                          decoding="async"
                           className="w-10 h-10 rounded-lg object-cover"
                         />
                       ) : (

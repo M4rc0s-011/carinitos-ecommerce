@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Trash2, CheckCircle, Copy, ShoppingBag, Loader2 } from 'lucide-react'
 import { useCarrito } from '../context/CarritoContext'
+import { optimizarImagen } from '../utils/cloudinary'
 import { crearPedido } from '../api/pedidos'
 
 const COSTO_ENVIO = { santo_domingo: 250, interior: 300 }
@@ -174,7 +175,7 @@ Adjunto comprobante de pago`
                 <Link to={`/producto/${item.id}`} className="flex-shrink-0">
                   <div className="w-20 h-20 rounded-xl bg-[#fbddc3] overflow-hidden flex items-center justify-center">
                     {item.imagen ? (
-                      <img src={item.imagen} alt={item.nombre} className="w-full h-full object-cover" />
+                      <img src={optimizarImagen(item.imagen, { w: 160, h: 160 })} alt={item.nombre} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     ) : (
                       <span className="font-display text-[#3d2314]/30 text-xs">Cariñitos</span>
                     )}

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { optimizarImagen } from '../utils/cloudinary'
 
 export default function ProductCard({ producto }) {
   return (
@@ -6,8 +7,10 @@ export default function ProductCard({ producto }) {
       <Link to={`/producto/${producto.id}`} className="block w-full aspect-[3/4] bg-[#fbddc3] overflow-hidden">
         {producto.imagen ? (
           <img
-            src={producto.imagen}
+            src={optimizarImagen(producto.imagen, { w: 500, h: 667 })}
             alt={producto.nombre}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         ) : (

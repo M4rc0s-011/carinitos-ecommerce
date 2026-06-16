@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ShoppingBag, Ruler, Layers, Clock, Truck, Link2, ArrowLeft, Loader2 } from 'lucide-react'
 import { getProducto } from '../api/productos'
+import { optimizarImagen } from '../utils/cloudinary'
 import { useCarrito } from '../context/CarritoContext'
 
 const MAX_MENSAJE = 200
@@ -93,8 +94,9 @@ export default function Producto() {
         <div className="flex flex-col gap-3">
           {producto.imagen ? (
             <img
-              src={producto.imagen}
+              src={optimizarImagen(producto.imagen, { w: 800, h: 800 })}
               alt={nombre}
+              decoding="async"
               className="w-full aspect-square rounded-2xl object-cover"
             />
           ) : (
