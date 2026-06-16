@@ -33,6 +33,29 @@ body {
   background: #ffffff;
 }
 
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #3d2314 #fbddc3;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fbddc3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3d2314;
+  border-radius: 9999px;
+  border: 2px solid #fbddc3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5a3520;
+}
+
 .font-display {
   font-family: 'MiFuente', cursive;
 }
@@ -71,6 +94,29 @@ body {
 
 .animate-card-enter {
   animation: card-enter 0.2s ease-out both;
+}
+
+.carrusel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3d2314 #fbddc3;
+}
+
+.carrusel-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carrusel-scroll::-webkit-scrollbar-track {
+  background: #fbddc3;
+  border-radius: 9999px;
+}
+
+.carrusel-scroll::-webkit-scrollbar-thumb {
+  background: #3d2314;
+  border-radius: 9999px;
+}
+
+.carrusel-scroll::-webkit-scrollbar-thumb:hover {
+  background: #5a3520;
 }
 
 @keyframes shimmer {

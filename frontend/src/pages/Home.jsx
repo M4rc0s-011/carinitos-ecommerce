@@ -38,7 +38,7 @@ export default function Home() {
 
   useEffect(() => {
     getProductos({ ordenar: 'recientes' })
-      .then((data) => setProductos(mezclar(data)))
+      .then((data) => setProductos(mezclar(data).slice(0, 6)))
       .catch(() => { })
   }, [])
 
@@ -111,7 +111,7 @@ export default function Home() {
             onMouseLeave={() => { pausadoRef.current = false }}
             onTouchStart={() => { pausadoRef.current = true }}
             onTouchEnd={() => { pausadoRef.current = false }}
-            className="overflow-x-auto pb-4 px-4"
+            className="carrusel-scroll overflow-x-auto pb-4 px-4"
           >
             <div className="flex items-stretch w-max gap-6">
               {[...productos, ...productos].map((p, i) => (
