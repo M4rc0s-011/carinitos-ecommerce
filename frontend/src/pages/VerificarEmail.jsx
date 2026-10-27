@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { verificarEmail } from '../api/auth'
+import ReenviarVerificacion from '../components/ReenviarVerificacion'
 
 export default function VerificarEmail() {
   const [params] = useSearchParams()
   const [estado, setEstado] = useState('verificando')
   const [errorMsg, setErrorMsg] = useState('')
+  const [expirado, setExpirado] = useState(false)
   const llamado = useRef(false)
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function VerificarEmail() {
       .catch((err) => {
         setEstado('error')
         setErrorMsg(err.response?.data?.error ?? 'Token inválido o expirado.')
+        setExpirado(err.response?.data?.motivo === 'expirado')
       })
   }, [])
 
@@ -54,13 +57,20 @@ export default function VerificarEmail() {
         {estado === 'error' && (
           <>
             <XCircle size={44} className="text-red-400" />
-            <h1 className="font-display text-3xl text-[#3d2314]">Enlace inválido</h1>
+            <h1 className="font-display text-3xl text-[#3d2314]">
+              {expirado ? 'Enlace expirado' : 'Enlace inválido'}
+            </h1>
             <p className="text-sm text-[#3d2314]/60">{errorMsg}</p>
+
+            <div className="w-full mt-2">
+              <ReenviarVerificacion />
+            </div>
+
             <Link
-              to="/registro"
+              to="/login"
               className="text-sm text-[#3d2314] underline underline-offset-4 hover:text-[#5a3520] transition-colors"
             >
-              Volver al registro
+              Ir al inicio de sesión
             </Link>
           </>
         )}

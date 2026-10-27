@@ -15,6 +15,21 @@ const verificarToken = (req, res, next) => {
   }
 }
 
+// Igual que verificarToken pero nunca bloquea: deja req.usuario si el token es
+// válido y sigue adelante si falta o está vencido. Para rutas que sirven tanto a
+// usuarios con sesión como a invitados.
+const tokenOpcional = (req, res, next) => {
+  const auth = req.headers['authorization']
+  if (auth?.startsWith('Bearer ')) {
+    try {
+      req.usuario = jwt.verify(auth.slice(7), process.env.JWT_SECRET)
+    } catch {
+      // Token viejo o inválido: se ignora y el pedido sigue como invitado.
+    }
+  }
+  next()
+}
+
 const soloAdmin = (req, res, next) => {
   if (req.usuario?.rol !== 'admin') {
     return res.status(403).json({ ok: false, error: 'Acceso denegado' })
@@ -22,4 +37,4 @@ const soloAdmin = (req, res, next) => {
   next()
 }
 
-module.exports = { verificarToken, soloAdmin }
+module.exports = { verificarToken, tokenOpcional, soloAdmin }

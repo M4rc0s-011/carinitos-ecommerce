@@ -4,7 +4,7 @@ const enviarVerificacion = async (email, nombre, token) => {
   const url = `${process.env.FRONTEND_URL}/verificar-email?token=${token}`
 
   await resend.emails.send({
-    from: 'Cariñitos by Jossy <noreply@xn--cariitosbyjossy-1qb.com>',
+    from: process.env.EMAIL_FROM,
     to: email,
     subject: 'Verifica tu cuenta en Cariñitos by Jossy',
     html: `

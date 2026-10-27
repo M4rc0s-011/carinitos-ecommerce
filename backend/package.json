@@ -10,7 +10,8 @@
     "test:unit": "vitest run src/tests/unit",
     "test:integration": "vitest run src/tests/integration",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "crear-admin": "node src/scripts/crear-admin.js"
   },
   "keywords": [],
   "author": "",
@@ -29,7 +30,6 @@
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^2.2.1",
     "mysql2": "^3.22.0",
-    "nodemailer": "^8.0.7",
     "resend": "^6.12.2"
   },
   "devDependencies": {

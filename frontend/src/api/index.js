@@ -12,6 +12,9 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+// Páginas públicas de auth: un token vencido no debe sacar al usuario de ellas.
+const RUTAS_SIN_REDIRECCION = ['/login', '/registro', '/verificar-email']
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -20,7 +23,9 @@ api.interceptors.response.use(
       localStorage.removeItem('usuario')
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('usuario')
-      window.location.href = '/login'
+      if (!RUTAS_SIN_REDIRECCION.includes(window.location.pathname)) {
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }

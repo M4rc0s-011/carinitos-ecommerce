@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader2, X, Eye, EyeOff } from 'lucide-react'
 import { registro as apiRegistro } from '../api/auth'
+import ReenviarVerificacion from '../components/ReenviarVerificacion'
 
 const TERMINOS_TEXTO =
   'Al registrarte aceptas que tus datos serán usados únicamente para gestionar ' +
@@ -53,6 +54,7 @@ export default function Registro() {
   const [errors, setErrors] = useState({})
   const [errorServidor, setErrorServidor] = useState(null)
   const [registrado, setRegistrado] = useState(false)
+  const [emailFallo, setEmailFallo] = useState(false)
 
   function validar() {
     const e = {}
@@ -75,7 +77,8 @@ export default function Registro() {
     setLoading(true)
     setErrorServidor(null)
     try {
-      await apiRegistro({ nombre: nombre.trim(), email, password })
+      const { emailEnviado } = await apiRegistro({ nombre: nombre.trim(), email, password })
+      setEmailFallo(emailEnviado === false)
       setRegistrado(true)
     } catch (err) {
       setErrorServidor(err.response?.data?.error ?? 'Error al crear la cuenta.')
@@ -93,10 +96,19 @@ export default function Registro() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0l-9.75 6.75L2.25 6.75" />
             </svg>
           </div>
-          <h1 className="font-display text-3xl text-[#3d2314]">Revisa tu email</h1>
+          <h1 className="font-display text-3xl text-[#3d2314]">
+            {emailFallo ? 'Cuenta creada' : 'Revisa tu email'}
+          </h1>
           <p className="text-sm text-[#3d2314]/60 max-w-xs leading-relaxed">
-            Te enviamos un enlace de verificación. Ábrelo para activar tu cuenta antes de iniciar sesión.
+            {emailFallo
+              ? 'No pudimos enviarte el enlace de verificación. Pide uno nuevo para activar tu cuenta.'
+              : 'Te enviamos un enlace de verificación. Ábrelo para activar tu cuenta antes de iniciar sesión.'}
           </p>
+
+          <div className="w-full mt-2">
+            <ReenviarVerificacion emailInicial={email.trim()} />
+          </div>
+
           <Link
             to="/login"
             className="text-sm text-[#3d2314] underline underline-offset-4 hover:text-[#5a3520] transition-colors mt-2"

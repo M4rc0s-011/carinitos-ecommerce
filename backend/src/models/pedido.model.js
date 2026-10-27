@@ -1,14 +1,29 @@
 const pool = require('../config/db')
 
-const create = async ({ usuario_id, tipo_envio, total, adelanto, items }) => {
+const create = async ({
+  usuario_id,
+  invitado_nombre,
+  invitado_telefono,
+  tipo_envio,
+  total,
+  adelanto,
+  items,
+}) => {
   const conn = await pool.getConnection()
   try {
     await conn.beginTransaction()
 
     const [pedidoResult] = await conn.execute(
-      `INSERT INTO pedidos (usuario_id, tipo_envio, total, adelanto, estado)
-       VALUES (?, ?, ?, ?, 'pendiente')`,
-      [usuario_id, tipo_envio ?? null, total, adelanto]
+      `INSERT INTO pedidos (usuario_id, invitado_nombre, invitado_telefono, tipo_envio, total, adelanto, estado)
+       VALUES (?, ?, ?, ?, ?, ?, 'pendiente')`,
+      [
+        usuario_id ?? null,
+        invitado_nombre ?? null,
+        invitado_telefono ?? null,
+        tipo_envio ?? null,
+        total,
+        adelanto,
+      ]
     )
     const pedido_id = pedidoResult.insertId
 
@@ -29,13 +44,16 @@ const create = async ({ usuario_id, tipo_envio, total, adelanto, items }) => {
       )
     }
 
-    // Vaciar carrito del usuario
-    await conn.execute(
-      `DELETE ci FROM carrito_items ci
-       INNER JOIN carrito c ON c.id = ci.carrito_id
-       WHERE c.usuario_id = ?`,
-      [usuario_id]
-    )
+    // Vaciar carrito del usuario. El invitado guarda el suyo en localStorage y lo
+    // limpia el cliente, así que aquí no hay nada que borrar.
+    if (usuario_id) {
+      await conn.execute(
+        `DELETE ci FROM carrito_items ci
+         INNER JOIN carrito c ON c.id = ci.carrito_id
+         WHERE c.usuario_id = ?`,
+        [usuario_id]
+      )
+    }
 
     await conn.commit()
     return pedido_id
@@ -50,9 +68,10 @@ const create = async ({ usuario_id, tipo_envio, total, adelanto, items }) => {
 const findAll = async () => {
   const [rows] = await pool.execute(
     `SELECT p.id, p.usuario_id, u.nombre AS usuario_nombre, u.email AS usuario_email,
+            p.invitado_nombre, p.invitado_telefono,
             p.tipo_envio, p.total, p.adelanto, p.estado, p.created_at
      FROM pedidos p
-     INNER JOIN usuarios u ON u.id = p.usuario_id
+     LEFT JOIN usuarios u ON u.id = p.usuario_id
      ORDER BY p.created_at DESC`
   )
   return rows
@@ -72,9 +91,10 @@ const findByUsuario = async (usuario_id) => {
 const findById = async (id) => {
   const [pedidos] = await pool.execute(
     `SELECT p.id, p.usuario_id, u.nombre AS usuario_nombre, u.email AS usuario_email,
+            p.invitado_nombre, p.invitado_telefono,
             p.tipo_envio, p.total, p.adelanto, p.estado, p.created_at
      FROM pedidos p
-     INNER JOIN usuarios u ON u.id = p.usuario_id
+     LEFT JOIN usuarios u ON u.id = p.usuario_id
      WHERE p.id = ?`,
     [id]
   )

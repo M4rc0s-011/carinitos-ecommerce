@@ -204,6 +204,9 @@ npm install
 | `CLOUDINARY_API_KEY`     | API key de Cloudinary                              | `000000000000000`                    |
 | `CLOUDINARY_API_SECRET`  | API secret de Cloudinary                           | `tu_secreto_cloudinary`              |
 | `RESEND_API_KEY`         | API key de Resend                                  | `re_xxxxxxxxxxxxxxxx`                |
+| `EMAIL_FROM`             | Remitente de los emails transaccionales            | `Cariñitos <no-reply@tu-dominio>`  |
+| `ADMIN_EMAIL`            | Email de la cuenta admin (`npm run crear-admin`)   | `admin@tu-dominio.com`               |
+| `ADMIN_PASSWORD`         | Password de la cuenta admin (nunca al repo)        | `una_password_fuerte`                |
 | `FRONTEND_URL`           | URL pública del frontend (CORS + enlaces de email) | `http://localhost:5173`              |
 | `PORT`                   | Puerto HTTP en el que escucha la API               | `3000`                               |
 | `NODE_ENV`               | Entorno de ejecución                               | `development`                        |
@@ -221,6 +224,9 @@ CLOUDINARY_CLOUD_NAME=tu_cloud_name
 CLOUDINARY_API_KEY=000000000000000
 CLOUDINARY_API_SECRET=tu_secreto_cloudinary
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxx
+EMAIL_FROM=Cariñitos <no-reply@tu-dominio>
+ADMIN_EMAIL=admin@tu-dominio.com
+ADMIN_PASSWORD=una_password_fuerte
 FRONTEND_URL=http://localhost:5173
 PORT=3000
 NODE_ENV=development

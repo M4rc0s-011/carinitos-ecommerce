@@ -28,7 +28,8 @@ const create = async ({ nombre, email, password, token_verificacion, token_verif
 
 const findByToken = async (token) => {
   const [rows] = await pool.execute(
-    'SELECT id, email_verificado, token_verificacion_expira FROM usuarios WHERE token_verificacion = ? AND token_verificacion_expira > NOW()',
+    `SELECT id, email_verificado, token_verificacion_expira > NOW() AS token_vigente
+       FROM usuarios WHERE token_verificacion = ?`,
     [token]
   )
   return rows[0] ?? null
@@ -36,8 +37,17 @@ const findByToken = async (token) => {
 
 const marcarVerificado = async (id) => {
   await pool.execute(
-    'UPDATE usuarios SET email_verificado = 1 WHERE id = ?',
+    `UPDATE usuarios
+        SET email_verificado = 1, token_verificacion = NULL, token_verificacion_expira = NULL
+      WHERE id = ?`,
     [id]
+  )
+}
+
+const actualizarTokenVerificacion = async (id, token, expira) => {
+  await pool.execute(
+    'UPDATE usuarios SET token_verificacion = ?, token_verificacion_expira = ? WHERE id = ?',
+    [token, expira, id]
   )
 }
 
@@ -56,4 +66,4 @@ const findAll = async () => {
   return rows
 }
 
-module.exports = { findByEmail, findById, create, findByToken, marcarVerificado, findAll, deleteById }
+module.exports = { findByEmail, findById, create, findByToken, marcarVerificado, actualizarTokenVerificacion, findAll, deleteById }

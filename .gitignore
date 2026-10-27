@@ -9,3 +9,6 @@ skills-lock.json
 .claude/
 .kiro/
 CLAUDE.md
+
+# Scripts locales con credenciales: nunca al repo
+update_admin.js

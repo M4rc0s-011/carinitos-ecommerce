@@ -23,6 +23,24 @@ const registroLimiter = rateLimit({
   handler: makeHandler('Demasiados registros desde esta IP. Intenta de nuevo en una hora.'),
 })
 
+const reenvioLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  skip: skipInTest,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: makeHandler('Demasiados reenvíos de verificación. Intenta de nuevo en una hora.'),
+})
+
+const pedidoLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 10,
+  skip: skipInTest,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: makeHandler('Demasiados pedidos desde esta conexión. Intenta de nuevo en una hora.'),
+})
+
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -32,4 +50,4 @@ const apiLimiter = rateLimit({
   handler: makeHandler('Demasiadas peticiones. Intenta más tarde.'),
 })
 
-module.exports = { loginLimiter, registroLimiter, apiLimiter }
+module.exports = { loginLimiter, registroLimiter, reenvioLimiter, pedidoLimiter, apiLimiter }

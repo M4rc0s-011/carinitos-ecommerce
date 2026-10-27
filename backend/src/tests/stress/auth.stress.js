@@ -2,8 +2,8 @@ import http from 'k6/http'
 import { check, sleep } from 'k6'
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:3000'
-const TEST_EMAIL = __ENV.TEST_EMAIL || 'admin@carinitos.com'
-const TEST_PASSWORD = __ENV.TEST_PASSWORD || 'Admin123!'
+const TEST_EMAIL = __ENV.TEST_EMAIL
+const TEST_PASSWORD = __ENV.TEST_PASSWORD
 
 export const options = {
   vus: 50,

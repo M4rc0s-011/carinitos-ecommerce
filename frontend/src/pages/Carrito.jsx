@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Trash2, CheckCircle, Copy, ShoppingBag, Loader2 } from 'lucide-react'
 import { useCarrito } from '../context/CarritoContext'
+import { useAuth } from '../context/AuthContext'
 import { optimizarImagen } from '../utils/cloudinary'
 import { crearPedido } from '../api/pedidos'
 
@@ -23,9 +24,14 @@ const INFO_ENVIO = [
   'Envíos al interior por Vimenpaq y BMcargo (RD$250)',
 ]
 
+function FieldError({ msg }) {
+  if (!msg) return null
+  return <p className="text-xs text-red-500 mt-0.5">{msg}</p>
+}
+
 export default function Carrito() {
   const { items, eliminarItem, actualizarCantidad, vaciarCarrito, totalPrecio } = useCarrito()
-  const navigate = useNavigate()
+  const { usuario, token } = useAuth()
 
   useEffect(() => { window.scrollTo(0, 0) }, [])
   const [tipoEnvio, setTipoEnvio] = useState('santo_domingo')
@@ -34,6 +40,11 @@ export default function Carrito() {
   const [whatsappUrl, setWhatsappUrl] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [errorPedido, setErrorPedido] = useState(null)
+  const [nombre, setNombre] = useState('')
+  const [telefono, setTelefono] = useState('')
+  const [errores, setErrores] = useState({})
+
+  const esInvitado = !token
 
   const costoEnvio = COSTO_ENVIO[tipoEnvio]
   const total = totalPrecio + costoEnvio
@@ -45,13 +56,21 @@ export default function Carrito() {
     setTimeout(() => setCopiados((prev) => ({ ...prev, [numero]: false })), 1500)
   }
 
+  function validarInvitado() {
+    const e = {}
+    if (nombre.trim().length < 3) e.nombre = 'Escribe tu nombre'
+    if (telefono.replace(/\D/g, '').length < 10) e.telefono = 'Escribe un teléfono válido'
+    return e
+  }
+
   async function handleConfirmar() {
-    const token = localStorage.getItem('token')
-    if (!token) {
-      navigate('/login', {
-        state: { mensaje: 'Debes iniciar sesión para confirmar tu pedido', from: '/carrito' },
-      })
-      return
+    if (esInvitado) {
+      const e = validarInvitado()
+      if (Object.keys(e).length > 0) {
+        setErrores(e)
+        return
+      }
+      setErrores({})
     }
 
     setEnviando(true)
@@ -65,6 +84,7 @@ export default function Carrito() {
           personalizacion: item.personalizacion,
         })),
         tipo_envio: tipoEnvio,
+        ...(esInvitado && { nombre: nombre.trim(), telefono: telefono.trim() }),
       }
       await crearPedido(payload)
     } catch {
@@ -88,7 +108,9 @@ export default function Carrito() {
         ? 'Delivery Santo Domingo'
         : 'Envío al interior (Vimenpaq / BMcargo)'
 
-    const mensaje = `Hola! Quiero realizar un pedido de Cariñitos by Jossy
+    const quienPide = esInvitado ? nombre.trim() : usuario?.nombre
+
+    const mensaje = `Hola! Soy ${quienPide}, quiero realizar un pedido de Cariñitos by Jossy
 
 *Productos:*
 ${listaProductos}
@@ -349,6 +371,54 @@ Adjunto comprobante de pago`
               </div>
             </div>
           </div>
+
+          {/* Datos de contacto — solo para quien compra sin cuenta */}
+          {esInvitado && (
+            <div className="border-t border-[#fbddc3] pt-5 flex flex-col gap-3">
+              <div>
+                <h3 className="text-sm font-medium text-[#3d2314]">Tus datos</h3>
+                <p className="text-xs text-[#3d2314]/50 mt-0.5">
+                  Para contactarte sobre tu pedido. No necesitas crear una cuenta.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm text-[#3d2314]">Nombre</label>
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Tu nombre"
+                  className={`w-full border rounded-xl px-4 py-2.5 text-sm text-[#3d2314] placeholder-[#3d2314]/30 focus:outline-none transition-colors ${
+                    errores.nombre ? 'border-red-400 focus:border-red-400' : 'border-[#fbddc3] focus:border-[#3d2314]'
+                  }`}
+                />
+                <FieldError msg={errores.nombre} />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm text-[#3d2314]">WhatsApp</label>
+                <input
+                  type="tel"
+                  inputMode="tel"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  placeholder="809-555-1234"
+                  className={`w-full border rounded-xl px-4 py-2.5 text-sm text-[#3d2314] placeholder-[#3d2314]/30 focus:outline-none transition-colors ${
+                    errores.telefono ? 'border-red-400 focus:border-red-400' : 'border-[#fbddc3] focus:border-[#3d2314]'
+                  }`}
+                />
+                <FieldError msg={errores.telefono} />
+              </div>
+
+              <p className="text-xs text-[#3d2314]/50">
+                ¿Prefieres guardar tu historial de pedidos?{' '}
+                <Link to="/login" className="text-[#3d2314] underline underline-offset-2">
+                  Inicia sesión
+                </Link>
+              </p>
+            </div>
+          )}
 
           {/* Confirmar pedido */}
           {errorPedido && (

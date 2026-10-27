@@ -13,8 +13,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
   password   VARCHAR(255)    NOT NULL,
   rol        ENUM('admin','usuario') NOT NULL DEFAULT 'usuario',
   created_at TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  email_verificado          TINYINT(1)  NOT NULL DEFAULT 0,
+  token_verificacion        VARCHAR(64) NULL,
+  token_verificacion_expira DATETIME    NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY uq_usuarios_email (email)
+  UNIQUE KEY uq_usuarios_email (email),
+  KEY idx_usuarios_token_verificacion (token_verificacion)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -------------------------------------------------------------
@@ -83,7 +87,10 @@ CREATE TABLE IF NOT EXISTS carrito_items (
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS pedidos (
   id          INT UNSIGNED    NOT NULL AUTO_INCREMENT,
-  usuario_id  INT UNSIGNED    NOT NULL,
+  usuario_id  INT UNSIGNED    NULL,
+  -- Pedido de invitado (sin cuenta): usuario_id NULL + estos dos llenos.
+  invitado_nombre   VARCHAR(100)  NULL,
+  invitado_telefono VARCHAR(30)   NULL,
   tipo_envio  VARCHAR(100),
   total       DECIMAL(10,2)   NOT NULL,
   adelanto    DECIMAL(10,2)   NOT NULL,
@@ -121,15 +128,10 @@ CREATE TABLE IF NOT EXISTS pedido_items (
 -- Datos iniciales
 -- -------------------------------------------------------------
 
--- Admin por defecto
--- Password: Admin123!  (hash generado con bcrypt, cost=10)
--- Para regenerar: node -e "require('bcrypt').hash('Admin123!',10).then(console.log)"
-INSERT IGNORE INTO usuarios (nombre, email, password, rol) VALUES (
-  'Admin',
-  'admin@carinitos.com',
-  '$2b$10$7vGYnOsA0ml7CpHeO4GUNe1W8XY5tp.kzf60eL7/eYAYvDJ54zuHu',
-  'admin'
-);
+-- Admin: a proposito no se crea aqui. Este archivo esta en el repo, asi que
+-- cualquier credencial puesta en el queda publica. Crealo a mano una sola vez
+-- con ADMIN_EMAIL y ADMIN_PASSWORD en el .env (que no se commitea):
+--   npm run crear-admin
 
 -- Categorías base
 INSERT IGNORE INTO categorias (nombre) VALUES

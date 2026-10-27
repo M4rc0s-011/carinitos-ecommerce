@@ -3,14 +3,29 @@ const Producto = require('../models/producto.model')
 const { calcularSubtotal, calcularAdelanto, calcularTotalConEnvio } = require('../utils/carrito.utils')
 
 const ESTADOS_VALIDOS = ['pendiente', 'en_proceso', 'completado', 'cancelado']
-const COSTO_ENVIO = 250
+const COSTO_ENVIO = { santo_domingo: 250, interior: 300 }
+const COSTO_ENVIO_DEFECTO = 250
 
 const crear = async (req, res) => {
   try {
-    const { tipo_envio, items } = req.body
+    const { tipo_envio, items, nombre, telefono } = req.body
 
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ ok: false, error: 'El pedido debe tener al menos un producto' })
+    }
+
+    // Sin sesión el pedido es de invitado y necesita contacto para poder atenderlo.
+    const esInvitado = !req.usuario
+    const nombreInvitado = nombre?.trim()
+    const telefonoInvitado = telefono?.trim()
+
+    if (esInvitado) {
+      if (!nombreInvitado) {
+        return res.status(400).json({ ok: false, error: 'Necesitamos tu nombre para registrar el pedido' })
+      }
+      if (!telefonoInvitado) {
+        return res.status(400).json({ ok: false, error: 'Necesitamos tu teléfono para contactarte' })
+      }
     }
 
     // Validar productos y construir snapshot
@@ -34,11 +49,14 @@ const crear = async (req, res) => {
     }
 
     const subtotal = calcularSubtotal(itemsEnriquecidos)
-    const total    = calcularTotalConEnvio(subtotal, COSTO_ENVIO)
+    const costoEnvio = COSTO_ENVIO[tipo_envio] ?? COSTO_ENVIO_DEFECTO
+    const total    = calcularTotalConEnvio(subtotal, costoEnvio)
     const adelanto = calcularAdelanto(total)
 
     const pedido_id = await Pedido.create({
-      usuario_id: req.usuario.id,
+      usuario_id: req.usuario?.id ?? null,
+      invitado_nombre: esInvitado ? nombreInvitado : null,
+      invitado_telefono: esInvitado ? telefonoInvitado : null,
       tipo_envio: tipo_envio ?? null,
       total,
       adelanto,

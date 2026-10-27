@@ -30,4 +30,11 @@ const validarLogin = [
   manejarErrores,
 ]
 
-module.exports = { validarRegistro, validarLogin }
+const validarReenvio = [
+  body('email')
+    .trim()
+    .isEmail().withMessage('Email inválido'),
+  manejarErrores,
+]
+
+module.exports = { validarRegistro, validarLogin, validarReenvio }

@@ -134,8 +134,19 @@ export default function AdminPedidos() {
                     >
                       <td className="px-5 py-4 font-mono text-xs text-[#3d2314]/40">#{p.id}</td>
                       <td className="px-5 py-4">
-                        <p className="font-semibold text-[#3d2314] leading-tight">{p.usuario_nombre}</p>
-                        <p className="text-xs text-[#3d2314]/45 mt-0.5">{p.usuario_email}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-[#3d2314] leading-tight">
+                            {p.usuario_nombre ?? p.invitado_nombre}
+                          </p>
+                          {!p.usuario_id && (
+                            <span className="flex-shrink-0 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-[#fbddc3] text-[#3d2314]">
+                              Invitado
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-[#3d2314]/45 mt-0.5">
+                          {p.usuario_email ?? p.invitado_telefono}
+                        </p>
                       </td>
                       <td className="px-5 py-4">
                         <p className="font-medium text-[#3d2314]">RD${Number(p.total).toLocaleString()}</p>

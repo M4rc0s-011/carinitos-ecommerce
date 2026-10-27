@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
 import { login as apiLogin } from '../api/auth'
+import ReenviarVerificacion from '../components/ReenviarVerificacion'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
@@ -19,17 +20,20 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [sinVerificar, setSinVerificar] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
     setError(null)
+    setSinVerificar(false)
     try {
       const { token, usuario } = await apiLogin({ email, password })
       login(token, usuario)
       navigate(destino, { replace: true })
     } catch (err) {
       setError(err.response?.data?.error ?? 'Error al iniciar sesión.')
+      setSinVerificar(err.response?.status === 403)
     } finally {
       setLoading(false)
     }
@@ -105,6 +109,12 @@ export default function Login() {
             {loading ? 'Iniciando...' : 'Iniciar sesión'}
           </button>
         </form>
+
+        {sinVerificar && (
+          <div className="mt-4">
+            <ReenviarVerificacion emailInicial={email.trim()} />
+          </div>
+        )}
 
         <p className="text-sm text-[#3d2314]/60 text-center mt-6">
           ¿No tienes cuenta?{' '}
