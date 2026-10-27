@@ -10,7 +10,7 @@ const COSTO_ENVIO = { santo_domingo: 250, interior: 300 }
 
 const CUENTAS = [
   { banco: 'Cédula', numero: '026-0075287-3', titular: 'JOSSIRA IVELISSE SANTANA GUANTE', logo: '/bancos/cedula.png' },
-  { banco: 'Cédula', numero: '402-3184650-8', titular: 'MARCOS XAVIER RODRIGUEZ SANTANA', logo: '/bancos/cedula.png' },
+  { banco: 'Cédula', numero: '402-3184650-8', titular: 'MARCOS XAVIER RODRIGUEZ SANTANA (PARA EL BHD)', logo: '/bancos/cedula.png' },
   { banco: 'Banco Popular (corriente)', numero: '847069721', titular: 'Marcos Rodríguez', logo: '/bancos/popular.jpg' },
   { banco: 'Banreservas (Ahorro)', numero: '6700075080', titular: 'Jossira Santana', logo: '/bancos/banreservas.png' },
   { banco: 'BHD (Ahorro)', numero: '30102240014', titular: 'Marcos Rodriguez', logo: '/bancos/bhd.jpg' },
@@ -21,7 +21,7 @@ const INFO_ENVIO = [
   'Indicarnos los detalles para tu colgante',
   'Entrega de 3 a 5 días',
   'Delivery en Santo Domingo (RD$250)',
-  'Envíos al interior por Vimenpaq y BMcargo (RD$250)',
+  'Envíos al interior por Vimenpaq y BMcargo (RD$300)',
 ]
 
 function FieldError({ msg }) {
@@ -389,9 +389,8 @@ Adjunto comprobante de pago`
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
                   placeholder="Tu nombre"
-                  className={`w-full border rounded-xl px-4 py-2.5 text-sm text-[#3d2314] placeholder-[#3d2314]/30 focus:outline-none transition-colors ${
-                    errores.nombre ? 'border-red-400 focus:border-red-400' : 'border-[#fbddc3] focus:border-[#3d2314]'
-                  }`}
+                  className={`w-full border rounded-xl px-4 py-2.5 text-sm text-[#3d2314] placeholder-[#3d2314]/30 focus:outline-none transition-colors ${errores.nombre ? 'border-red-400 focus:border-red-400' : 'border-[#fbddc3] focus:border-[#3d2314]'
+                    }`}
                 />
                 <FieldError msg={errores.nombre} />
               </div>
@@ -404,9 +403,8 @@ Adjunto comprobante de pago`
                   value={telefono}
                   onChange={(e) => setTelefono(e.target.value)}
                   placeholder="809-555-1234"
-                  className={`w-full border rounded-xl px-4 py-2.5 text-sm text-[#3d2314] placeholder-[#3d2314]/30 focus:outline-none transition-colors ${
-                    errores.telefono ? 'border-red-400 focus:border-red-400' : 'border-[#fbddc3] focus:border-[#3d2314]'
-                  }`}
+                  className={`w-full border rounded-xl px-4 py-2.5 text-sm text-[#3d2314] placeholder-[#3d2314]/30 focus:outline-none transition-colors ${errores.telefono ? 'border-red-400 focus:border-red-400' : 'border-[#fbddc3] focus:border-[#3d2314]'
+                    }`}
                 />
                 <FieldError msg={errores.telefono} />
               </div>
